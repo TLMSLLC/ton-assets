@@ -3,7 +3,7 @@ import json
 
 import yaml
 import glob
-
+from urllib.parse import urlparse
 from dexes import __get_stonfi_assets, __get_dedust_assets, __get_backed_assets, update_stonfi_routers
 from utlis import normalize_address
 
@@ -80,8 +80,11 @@ def merge_jettons():
             raise Exception(f"invalid keys {set(j.keys()) - ALLOWED_KEYS} in {j.get('name')}")
         if len(set(j.keys()) & {"name", "symbol", "address"}) < 3:
             raise Exception(f"name, symbol, and address are required in {j.get('name')}")
-        if 'image' in j and j['image'].startswith('https://cache.tonapi.io'):
-            raise Exception(f"don't use cache.tonapi.io as image source in {j.get('name')}")
+        if 'image' in j:
+            parsed = urlparse(j['image'])
+            hostname = parsed.hostname
+            if hostname == "cache.tonapi.io" or (hostname and hostname.endswith(".cache.tonapi.io")):
+                raise Exception(f"don't use cache.tonapi.io as image source in {j.get('name')}")
 
         normalized = normalize_address(j["address"], True)
         if normalized in already_exist_address:
