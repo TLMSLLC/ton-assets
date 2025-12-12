@@ -1,4 +1,6 @@
 name: Test source files for correctness
+permissions:
+  contents: read
 on:
   pull_request:
   push:
