@@ -18,7 +18,7 @@ jobs:
           # Behold bash power and tremble!
           shopt -s extglob
           shopt -s nullglob
-          for FILENAME in {accounts,collections,jettons}/!(*.yaml); do
+          for FILENAME in {accounts,
             [ "${FILENAME}" == 'jettons/example.yaml.template' ] && continue
             echo "Found '${FILENAME}' file but only *.yaml files are allowed here."
             exit 1
